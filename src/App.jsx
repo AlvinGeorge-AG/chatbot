@@ -41,7 +41,7 @@ function ChatInput({chatMessages , setChatMessages }){
     }
 
     return (
-      <>
+      <div className="chat-input-container">
         <input 
             placeholder="Enter your prompt here" 
             type='text' 
@@ -49,9 +49,12 @@ function ChatInput({chatMessages , setChatMessages }){
             onChange={inputChange}
             value={InputValue}
             onKeyDown={keyboard}
+            className="chat-input"
+            
         />
-        <button onClick={sendMessage}> Send </button>
-      </>
+        <button onClick={sendMessage} 
+                className="send-button"> Send </button>
+      </div>
     )
 }
 
@@ -60,29 +63,41 @@ function Message(props){ // or we can use Message({message,sender}) as an even s
   const {message , sender} = props;
 
   return (
-    <div>
-      {sender==='bot' && <img width="30" src="../bot.png" />}
-      {message}
-      {sender==='user' && <img width="30" src="../user.png" />}
+    <div className={
+            sender === 'user'
+              ? 'chat-message-user'
+              : 'chat-message-robot'
+          }>
+      {sender==='bot' && <img className="chat-message-profile"  src="../bot.png" />}
+      <div className="chat-message-text" >{message}</div>
+      {sender==='user' && <img className="chat-message-profile" src="../user.png" />}
     </div>
-  )
+  );
 }
 
 function ChatMessages({chatMessages}){
 
+  const chatMessagesRef = React.useRef(null);
+
+  React.useEffect(()=>{
+      const chatMessageElem = chatMessagesRef.current
+      if(chatMessageElem){
+        chatMessageElem.scrollTop = chatMessageElem.scrollHeight;
+      }
+  },[chatMessages])
+
   return (
-      <>
+      <div className="chat-messages-container" ref={chatMessagesRef}>
         {chatMessages.map((currentMessage)=>{
                              return (
                                       <Message 
                                         message={currentMessage.message} 
                                         sender={currentMessage.sender} 
                                         key={currentMessage.id}
-                                      />
-                                    )
+                                      />)
                           }
                         )}
-      </>
+      </div>
   );
   
 }
@@ -113,15 +128,16 @@ function App() {
   ]);
 
   return (
-    <>
+    <div className="app-container">
+      
+      <ChatMessages
+        chatMessages={chatMessages}
+      />
       <ChatInput 
         chatMessages={chatMessages}
         setChatMessages={setChatMessages}
       />
-      <ChatMessages
-        chatMessages={chatMessages}
-      />
-    </>
+    </div>
   )
 }
 
