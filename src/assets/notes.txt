@@ -1,0 +1,23 @@
+
+  // const ChatMessagesComponents =  ChatMessages.map((currentMessage)=>{
+  //                           return (
+  //                             <Message message={currentMessage.message} sender={currentMessage.sender} />
+  //                           )
+  //                         });
+
+
+    const chatMessages = array[0];
+  const setChatMessages = array[1];
+
+    // const message = props.message;
+  // const sender = props.sender;
+
+    // if(sender==='bot'){
+  //   return (
+  //   <div>
+  //     <img width="30" src="../bot.png" />      
+  //     {message}
+
+  //   </div>
+  // )
+  // }
