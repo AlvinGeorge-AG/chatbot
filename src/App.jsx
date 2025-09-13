@@ -1,56 +1,58 @@
 import React, { useState } from "react";
 
 function ChatInput({chatMessages , setChatMessages }){
-   const [InputValue , setInputValue]  = useState('');
-  function inputChange(event){
-      setInputValue(event.target.value);
-  }
+  
+    const [InputValue , setInputValue]  = useState('');
 
-  function sendMessage(){
+    function inputChange(event){
+        setInputValue(event.target.value);
+    }
+    function keyboard(event){
+        if(event.key=="Enter"){
+          sendMessage();
+        }
+    }
 
-        const newChatmessages = [
-            ...chatMessages,
-            {
-              message:InputValue,
-              sender:"user",
-              id:crypto.randomUUID()
-            }
-          ];
+    function sendMessage(){
 
-        setChatMessages(newChatmessages);
- 
-        const response = Chatbot.getResponse(InputValue);
-        setChatMessages([
-            ...newChatmessages,
-            {
-              message:response,
-              sender:"bot",
-              id:crypto.randomUUID()
-            }
-          ]);
-        setInputValue("");
+          const newChatmessages = [
+              ...chatMessages,
+              {
+                message:InputValue,
+                sender:"user",
+                id:crypto.randomUUID()
+              }
+            ];
 
-  }
-  function keyboard(event){
-      if(event.key=="Enter"){
-        sendMessage();
-      }
-  }
-  return (
-    <>
-      <input 
-        placeholder="Enter your prompt here" 
-        type='text' 
-        size={30} 
-        onChange={inputChange}
-        value={InputValue}
-        onKeyDown={keyboard}
-      />
-      <button
-        onClick={sendMessage}
-      >Send</button>
-    </>
-  )
+          setChatMessages(newChatmessages);
+  
+          const response = Chatbot.getResponse(InputValue);
+          setChatMessages([
+              ...newChatmessages,
+              {
+                message:response,
+                sender:"bot",
+                id:crypto.randomUUID()
+              }
+            ]);
+            
+          setInputValue("");
+
+    }
+
+    return (
+      <>
+        <input 
+            placeholder="Enter your prompt here" 
+            type='text' 
+            size={30} 
+            onChange={inputChange}
+            value={InputValue}
+            onKeyDown={keyboard}
+        />
+        <button onClick={sendMessage}> Send </button>
+      </>
+    )
 }
 
 function Message(props){ // or we can use Message({message,sender}) as an even simple shortcut , since the first parameter is props , destructuring takes there itself.
@@ -70,8 +72,7 @@ function ChatMessages({chatMessages}){
 
   return (
       <>
-        {chatMessages.map(
-                          (currentMessage)=>{
+        {chatMessages.map((currentMessage)=>{
                              return (
                                       <Message 
                                         message={currentMessage.message} 
@@ -80,8 +81,7 @@ function ChatMessages({chatMessages}){
                                       />
                                     )
                           }
-                        )
-      }
+                        )}
       </>
   );
   
@@ -89,7 +89,7 @@ function ChatMessages({chatMessages}){
 
 
 function App() {
-  const [chatMessages , setChatMessages] = React.useState([  //Array Destructuring
+  const [chatMessages , setChatMessages] = useState([  //Array Destructuring
     {
       message:"Hi hello",
       sender:"user",
@@ -111,8 +111,6 @@ function App() {
       id:"id4"
     }
   ]);
-
- 
 
   return (
     <>
