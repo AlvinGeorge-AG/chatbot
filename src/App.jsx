@@ -8,18 +8,20 @@ function ChatInput({chatMessages , setChatMessages }){
 
   function sendMessage(){
 
-        setChatMessages([
+        const newChatmessages = [
             ...chatMessages,
             {
               message:InputValue,
               sender:"user",
               id:crypto.randomUUID()
             }
-          ]);
+          ];
+
+        setChatMessages(newChatmessages);
  
         const response = Chatbot.getResponse(InputValue);
         setChatMessages([
-            ...chatMessages,
+            ...newChatmessages,
             {
               message:response,
               sender:"bot",
@@ -29,6 +31,11 @@ function ChatInput({chatMessages , setChatMessages }){
         setInputValue("");
 
   }
+  function keyboard(event){
+      if(event.key=="Enter"){
+        sendMessage();
+      }
+  }
   return (
     <>
       <input 
@@ -37,6 +44,7 @@ function ChatInput({chatMessages , setChatMessages }){
         size={30} 
         onChange={inputChange}
         value={InputValue}
+        onKeyDown={keyboard}
       />
       <button
         onClick={sendMessage}
